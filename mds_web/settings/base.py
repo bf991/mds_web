@@ -31,7 +31,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'news',
+    'masterclass',
+    'clothes',
+    'ckeditor',
+    'ckeditor_uploader'
+
 ]
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -108,4 +115,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = 'static/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = 'media/'
 

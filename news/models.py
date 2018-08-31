@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from ckeditor_uploader.fields import RichTextUploadingField
 User = get_user_model()
 
 class Category(models.Model):
@@ -44,7 +45,7 @@ class News(models.Model):
         null = True)
     title = models.CharField("Заголовок", max_length=100)
     text_min = models.TextField("Анонс", max_length=400)
-    text = models.TextField("Текста статьи")
+    text = RichTextUploadingField("Текста статьи")
     tags = models.ManyToManyField(Tag, verbose_name="Теги")
     created = models.DateTimeField("Дата создания", auto_now_add=True)
     description = models.CharField("Описание", max_length=100)
