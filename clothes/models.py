@@ -2,32 +2,26 @@ from django.db import models
 from news.models import Tag
 from ckeditor_uploader.fields import RichTextUploadingField
 
-class Type(models.Model):
-    """ Класс категорий Одежды
+class Bijou(models.Model):
+    """ Класс бижютерии
     """
-    title = models.CharField("тип одежды", max_length=50)
 
-    class Meta:
-        verbose_name = "тип одежды"
-        verbose_name_plural = "типы одежды"
+    TYPE_CHOICES=(
+        ('ring', 'Кольцо'),
+        ('earring', 'Серьги'),
+        ('pendant', 'Кулон'),
+        ('bangle', 'Браслет'),
+        ('brooch', 'Брошь'),
+    )
 
-    def __str__(self):
-        return self.title
-
-
-
-class Clothe(models.Model):
-    """ Класс новостей
-    """
-    type = models.ForeignKey(
-        Type,
+    type = models.CharField(
         verbose_name="Тип",
-        on_delete=models.SET_NULL,
-        null = True)
+        choices=TYPE_CHOICES,
+        default='brooch',
+        max_length=10)
     title = models.CharField("Наименование", max_length=100)
     text_min = models.TextField("Краткое описание", max_length=400)
     text_full = RichTextUploadingField("Полное описание")
-    size = models.PositiveSmallIntegerField("Размер")
     price = models.PositiveSmallIntegerField("Цена")
     tags = models.ManyToManyField(Tag, verbose_name="Теги")
     created = models.DateTimeField("Дата создания", auto_now_add=True)
@@ -35,9 +29,64 @@ class Clothe(models.Model):
     keyword = models.CharField("Ключевае слова", max_length=50)
     actuality = models.BooleanField("Наличие", default=True)
 
+    class Meta:
+        verbose_name = "Бижютерия"
+        verbose_name_plural = "Бижютерия"
 
+    def __str__(self):
+        return self.title
 
+class Clothe(models.Model):
+    """ Класс одежды
+    """
 
+    AGE_CATEGORY_CHOICES=(
+        ('child', 'детская одежда'),
+        ('old','одежда для взрослых'),
+    )
+
+    TYPE_CHOICES=(
+        ('shirt', 'Рубашка'),
+        ('pants', 'Брюки'),
+        ('dress', 'Патье'),
+        ('blouse', 'Блузка'),
+        ('costume', 'Костюм'),
+        ('jacket', 'Пиджак'),
+        ('shoes', 'Туфли'),
+        ('tshirt', 'Футболка'),
+        ('headdress', 'Головной убор'),
+    )
+
+    MALE_CHOICES = (
+        ('male', 'Мужская одежда'),
+        ('female', 'Женская одежда'),
+    )
+
+    type = models.CharField(
+        verbose_name="Тип",
+        choices=TYPE_CHOICES,
+        default='dress',
+        max_length=10)
+    title = models.CharField("Наименование", max_length=100)
+    text_min = models.TextField("Краткое описание", max_length=400)
+    text_full = RichTextUploadingField("Полное описание")
+    age_category = models.CharField(
+        verbose_name="Возрастная категория",
+        choices=AGE_CATEGORY_CHOICES,
+        default='old',
+        max_length=10)
+    male = models.CharField(
+        verbose_name="Пол",
+        choices=MALE_CHOICES,
+        default='female',
+        max_length=10)
+    size = models.PositiveSmallIntegerField("Размер")
+    price = models.PositiveSmallIntegerField("Цена")
+    tags = models.ManyToManyField(Tag, verbose_name="Теги")
+    created = models.DateTimeField("Дата создания", auto_now_add=True)
+    description = models.CharField("Описание", max_length=100)
+    keyword = models.CharField("Ключевае слова", max_length=50)
+    actuality = models.BooleanField("Наличие", default=True)
 
     class Meta:
         verbose_name = "Одежда"

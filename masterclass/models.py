@@ -4,19 +4,52 @@ from ckeditor_uploader.fields import RichTextUploadingField
 
 
 class Masterclass(models.Model):
-    """ Класс новостей
+    """ class masterclass
     """
-    category = models.ForeignKey(
-        Category,
+    AGE_CATEGORY_CHOICES=(
+        ('child', 'для детей'),
+        ('old','для взрослых'),
+        ('child&old','для всех'),
+    )
+
+    CATEGORY_MK_CHOICES=(
+        ('hud', 'Художественный'),
+        ('candy', 'Кондитерский'),
+        ('cook', 'Кулинарный'),
+        ('handmade', 'Творческий'),
+
+    )
+
+    FORM_MK_CHOICES = (
+        ('ind', 'Индивидуальный'),
+        ('group', 'Групповой'),
+    )
+
+#FIELDS
+    category_mk = models.CharField(
         verbose_name="Категория",
-        on_delete=models.SET_NULL,
-        null = True)
+        choices=CATEGORY_MK_CHOICES,
+        max_length=10,
+        default='hud'
+    )
     title = models.CharField("Название МК", max_length=100)
+    duration = models.DurationField("Длительность", default='00:00:00')
+    age_category = models.CharField(
+        verbose_name="Возрастная категория",
+        choices=AGE_CATEGORY_CHOICES,
+        max_length=10,
+        default='child&old'
+    )
+    form = models.CharField(
+        verbose_name="Форма МК",
+        choices=FORM_MK_CHOICES,
+        max_length=10,
+        default='group'
+    )
+    price = models.PositiveSmallIntegerField("Цена МК")
+
     text_min = models.TextField("Краткое описание", max_length=400)
     text_full = RichTextUploadingField("Полное описание")
-    duration = models.DurationField("Длительность", default='00:00:00')
-    age_category = models.PositiveSmallIntegerField("Возрастная категория")
-    price = models.PositiveSmallIntegerField("Цена МК")
     tags = models.ManyToManyField(Tag, verbose_name="Теги")
     created = models.DateTimeField("Дата создания", auto_now_add=True)
     description = models.CharField("Описание", max_length=100)
