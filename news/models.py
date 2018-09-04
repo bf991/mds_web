@@ -1,12 +1,15 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 from ckeditor_uploader.fields import RichTextUploadingField
+from pytils.translit import slugify
+
 User = get_user_model()
 
 class Category(models.Model):
     """ Класс категорий
     """
     title = models.CharField("Название", max_length=50)
+    slug = models.SlugField("Ссылка",max_length=50, default='')
 
     class Meta:
         verbose_name = "Категория"
@@ -34,6 +37,11 @@ class Tag(models.Model):
 class News(models.Model):
     """ Класс новостей
     """
+    upload_to = 'img/news/%s/%s/%s/%d/%s'
+
+    def _get_upload_to(self, filename):
+        return self.upload_to % (self.form, self.age_category, self.category_mk, self.id, slugify(filename))
+
     user = models.ForeignKey(
         User,
         verbose_name = "Автор",

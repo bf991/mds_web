@@ -5,6 +5,10 @@ from ckeditor_uploader.fields import RichTextUploadingField
 class Bijou(models.Model):
     """ Класс бижютерии
     """
+    upload_to = 'img/bijou/%s/%d/%s'
+
+    def _get_upload_to(self, filename):
+        return self.upload_to % (self.type, self.id, filename)
 
     TYPE_CHOICES=(
         ('ring', 'Кольцо'),
@@ -20,7 +24,14 @@ class Bijou(models.Model):
         default='brooch',
         max_length=10)
     title = models.CharField("Наименование", max_length=100)
+    slug = models.SlugField("Ссылка", max_length=50, default='')
     text_min = models.TextField("Краткое описание", max_length=400)
+    image_main = models.ImageField(
+        upload_to = _get_upload_to,
+        verbose_name="Фото",
+        max_length=100,
+        null=True
+        )
     text_full = RichTextUploadingField("Полное описание")
     price = models.PositiveSmallIntegerField("Цена")
     tags = models.ManyToManyField(Tag, verbose_name="Теги")
@@ -39,6 +50,9 @@ class Bijou(models.Model):
 class Clothe(models.Model):
     """ Класс одежды
     """
+    upload_to = 'img/clothes/%s/%s/%d/%s'
+    def _get_upload_to(self, filename):
+        return self.upload_to % (self.male, self.type, self.id, filename)
 
     AGE_CATEGORY_CHOICES=(
         ('child', 'детская одежда'),
@@ -68,7 +82,14 @@ class Clothe(models.Model):
         default='dress',
         max_length=10)
     title = models.CharField("Наименование", max_length=100)
+    slug = models.SlugField("Ссылка", max_length=50, default='')
     text_min = models.TextField("Краткое описание", max_length=400)
+    image_main = models.ImageField(
+        upload_to = _get_upload_to,
+        verbose_name="Фото",
+        max_length=100,
+        null=True
+        )
     text_full = RichTextUploadingField("Полное описание")
     age_category = models.CharField(
         verbose_name="Возрастная категория",

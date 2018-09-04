@@ -3,9 +3,17 @@ from news.models import Tag, Category
 from ckeditor_uploader.fields import RichTextUploadingField
 
 
+
 class Masterclass(models.Model):
     """ class masterclass
     """
+    upload_to = 'img/MK/%s/%s/%s/%d/%s'
+
+    def _get_upload_to(self, filename):
+
+        filename = self.slug + filename[filename.rfind(".")+1:]
+        return self.upload_to % (self.form, self.age_category, self.category_mk, self.id, filename)
+
     AGE_CATEGORY_CHOICES=(
         ('child', 'для детей'),
         ('old','для взрослых'),
@@ -33,6 +41,7 @@ class Masterclass(models.Model):
         default='hud'
     )
     title = models.CharField("Название МК", max_length=100)
+    slug = models.SlugField("Ссылка",max_length=50, default='')
     duration = models.DurationField("Длительность", default='00:00:00')
     age_category = models.CharField(
         verbose_name="Возрастная категория",
@@ -49,6 +58,12 @@ class Masterclass(models.Model):
     price = models.PositiveSmallIntegerField("Цена МК")
 
     text_min = models.TextField("Краткое описание", max_length=400)
+    image_main = models.ImageField(
+        upload_to=_get_upload_to,
+        verbose_name="Фото",
+        max_length=100,
+        null=True
+    )
     text_full = RichTextUploadingField("Полное описание")
     tags = models.ManyToManyField(Tag, verbose_name="Теги")
     created = models.DateTimeField("Дата создания", auto_now_add=True)
