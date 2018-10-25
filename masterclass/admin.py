@@ -1,8 +1,5 @@
 from django.contrib import admin
-from masterclass.models import Masterclass
-
-
-
+from masterclass.models import Masterclass, Masterclass_events
 
 
 class MasterclassAdmin(admin.ModelAdmin):
@@ -12,6 +9,13 @@ class MasterclassAdmin(admin.ModelAdmin):
     list_filter = ('category_mk','age_category','form',)
     search_fields = ('title',)
 
+class Masterclass_eventsAdmin(admin.ModelAdmin):
+    list_display = ('MK', 'date', 'visiters_num',)
+    list_editable = ( 'date', 'visiters_num',)
+    list_filter = ('MK',)
+    search_fields = ('MK',)
 
 
 admin.site.register(Masterclass, MasterclassAdmin)
+
+admin.site.register(Masterclass_events, Masterclass_eventsAdmin)

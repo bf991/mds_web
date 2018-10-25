@@ -3,24 +3,22 @@ from news.models import Tag, Category
 from ckeditor_uploader.fields import RichTextUploadingField
 
 
-
 class Masterclass(models.Model):
     """ class masterclass
     """
-    upload_to = 'img/MK/%s/%s/%s/%d/%s'
+    upload_to = 'img/MK/%s/%s/%s/%s/%s'
 
     def _get_upload_to(self, filename):
+        filename = self.slug + filename[filename.rfind(".") :]
+        return self.upload_to % (self.form, self.age_category, self.category_mk, self.slug, filename)
 
-        filename = self.slug + filename[filename.rfind(".")+1:]
-        return self.upload_to % (self.form, self.age_category, self.category_mk, self.id, filename)
-
-    AGE_CATEGORY_CHOICES=(
+    AGE_CATEGORY_CHOICES = (
         ('child', 'для детей'),
-        ('old','для взрослых'),
-        ('child&old','для всех'),
+        ('old', 'для взрослых'),
+        ('child&old', 'для всех'),
     )
 
-    CATEGORY_MK_CHOICES=(
+    CATEGORY_MK_CHOICES = (
         ('hud', 'Художественный'),
         ('candy', 'Кондитерский'),
         ('cook', 'Кулинарный'),
@@ -33,7 +31,7 @@ class Masterclass(models.Model):
         ('group', 'Групповой'),
     )
 
-#FIELDS
+    # FIELDS
     category_mk = models.CharField(
         verbose_name="Категория",
         choices=CATEGORY_MK_CHOICES,
@@ -41,7 +39,7 @@ class Masterclass(models.Model):
         default='hud'
     )
     title = models.CharField("Название МК", max_length=100)
-    slug = models.SlugField("Ссылка",max_length=50, default='')
+    slug = models.SlugField("Ссылка", max_length=50, default='')
     duration = models.DurationField("Длительность", default='00:00:00')
     age_category = models.CharField(
         verbose_name="Возрастная категория",
@@ -71,10 +69,28 @@ class Masterclass(models.Model):
     keyword = models.CharField("Ключевае слова", max_length=50)
     actuality = models.BooleanField("Актуальность МК", default=True)
 
-
     class Meta:
         verbose_name = "Мастер-класс"
         verbose_name_plural = "Мастер-классы"
 
     def __str__(self):
         return self.title
+
+
+class Masterclass_events(models.Model):
+    MK = models.ForeignKey(
+        Masterclass,
+        verbose_name='Название МК',
+        on_delete=models.SET_NULL,
+        null=True
+        )
+    date = models.DateTimeField("Дата и время")
+    visiters_num = models.PositiveSmallIntegerField("Количество мест", default=1)
+
+    class Meta:
+        verbose_name = "Мастер-класс мероприятие"
+        verbose_name_plural = "Мастер-классы мероприятия"
+
+    def __str__(self):
+        return '%s  Дата:%s' %(self.MK.title, str(self.date.day)+'.'+str(self.date.month)+'.'+str(self.date.year))
+

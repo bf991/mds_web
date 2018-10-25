@@ -4,7 +4,7 @@ from clothes.models import Clothe, Bijou
 class ClotheAdmin(admin.ModelAdmin):
     list_display = ('title', 'slug','type','text_min','age_category','male','price','actuality',)
     list_editable = ('slug','type','age_category','male','price','actuality',)
-    list_filter = ('type', 'male','age_category',)
+    list_filter = ('type', 'male','age_category','price',)
     search_fields = ('title',)
     prepopulated_fields = {'slug': ('title',)}
 

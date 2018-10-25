@@ -37,10 +37,11 @@ class Tag(models.Model):
 class News(models.Model):
     """ Класс новостей
     """
-    upload_to = 'img/news/%s/%s/%s/%d/%s'
+    upload_to = 'img/news/%s/%s/%s'
 
     def _get_upload_to(self, filename):
-        return self.upload_to % (self.form, self.age_category, self.category_mk, self.id, slugify(filename))
+        filename = self.slug + filename[filename.rfind("."):]
+        return self.upload_to % (self.category.slug, self.slug, slugify(filename))
 
     user = models.ForeignKey(
         User,
@@ -52,7 +53,14 @@ class News(models.Model):
         on_delete=models.SET_NULL,
         null = True)
     title = models.CharField("Заголовок", max_length=100)
+    slug = models.SlugField("Ссылка", max_length=50, default='')
     text_min = models.TextField("Анонс", max_length=400)
+    image_main = models.ImageField(
+        upload_to=_get_upload_to,
+        verbose_name="Фото",
+        max_length=100,
+        null=True
+    )
     text = RichTextUploadingField("Текста статьи")
     tags = models.ManyToManyField(Tag, verbose_name="Теги")
     created = models.DateTimeField("Дата создания", auto_now_add=True)

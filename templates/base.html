@@ -1,9 +1,12 @@
 <!DOCTYPE html>
+{% load bootstrap4 %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="description" content="{% block desc %}{% endblock desc %}">
     <meta name="keywords" content="{% block keywords %}{% endblock keywords %}">
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery='full' %}
     <title>{% block title %}{% endblock title %}</title>
 </head>
 <body>

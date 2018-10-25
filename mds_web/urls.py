@@ -15,13 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
-
 from django.conf.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
+from . import views
+from .views import MK_eventsListView
 
 urlpatterns = [
+
+    path('', MK_eventsListView.as_view()),
+    path('admin-tools/' ,  include ('admin_tools.urls')),
     path('admin/', admin.site.urls),
     path('ckeditor', include('ckeditor_uploader.urls')),
     path('', include("news.urls")),

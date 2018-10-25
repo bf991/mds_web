@@ -5,10 +5,11 @@ from ckeditor_uploader.fields import RichTextUploadingField
 class Bijou(models.Model):
     """ Класс бижютерии
     """
-    upload_to = 'img/bijou/%s/%d/%s'
+    upload_to = 'img/bijou/%s/%s/%s'
 
     def _get_upload_to(self, filename):
-        return self.upload_to % (self.type, self.id, filename)
+        filename = self.slug + filename[filename.rfind("."):]
+        return self.upload_to % (self.type, self.slug, filename)
 
     TYPE_CHOICES=(
         ('ring', 'Кольцо'),
@@ -50,9 +51,10 @@ class Bijou(models.Model):
 class Clothe(models.Model):
     """ Класс одежды
     """
-    upload_to = 'img/clothes/%s/%s/%d/%s'
+    upload_to = 'img/clothes/%s/%s/%s/%s'
     def _get_upload_to(self, filename):
-        return self.upload_to % (self.male, self.type, self.id, filename)
+        filename = self.slug + filename[filename.rfind("."):]
+        return self.upload_to % (self.male, self.type, self.slug, filename)
 
     AGE_CATEGORY_CHOICES=(
         ('child', 'детская одежда'),
